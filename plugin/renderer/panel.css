@@ -1,0 +1,355 @@
+/*
+ * Panel styling for the Perch Bridge window.
+ *
+ * PI-Desktop reserves a 46px drag band at the top and draws only its own capsule
+ * there, so normal-flow content is offset by the host automatically and this
+ * stylesheet must not add a second offset. Fixed top UI uses the host's own
+ * variable instead.
+ *
+ * The theme comes from the host as CSS custom properties; the fallbacks here keep
+ * the panel readable if a variable is missing. Light and dark are both handled by
+ * the same rules because every colour is a variable.
+ */
+
+:root {
+  --perch-bg: var(--pi-surface, #ffffff);
+  --perch-fg: var(--pi-text, #1c1b1a);
+  --perch-muted: var(--pi-text-muted, #6b6a68);
+  --perch-line: var(--pi-border, #e2e1de);
+  --perch-soft: var(--pi-surface-raised, #f6f5f3);
+  --perch-accent: var(--pi-accent, #2f6f4e);
+  --perch-warn: var(--pi-warning, #b45a00);
+  --perch-danger: var(--pi-danger, #a3231f);
+  --perch-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--perch-bg);
+  color: var(--perch-fg);
+  font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: calc(100dvh - var(--pi-plugin-titlebar-height, 46px));
+  padding: 16px 18px 18px;
+}
+
+/* A toolbar that must stay visible while the table scrolls. */
+.bar {
+  position: sticky;
+  top: var(--pi-plugin-titlebar-height, 46px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0 10px;
+  background: var(--perch-bg);
+  border-bottom: 1px solid var(--perch-line);
+}
+
+.bar-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.bar-title h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--perch-muted);
+  flex: none;
+  transition: background 160ms ease;
+}
+
+.dot.ok {
+  background: var(--perch-accent);
+}
+
+.dot.warn {
+  background: var(--perch-warn);
+}
+
+.dot.bad {
+  background: var(--perch-danger);
+}
+
+.pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--perch-soft);
+  border: 1px solid var(--perch-line);
+  color: var(--perch-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bar-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+  flex-wrap: wrap;
+}
+
+select { font:inherit; color:var(--perch-fg); background:var(--perch-soft); border:1px solid var(--perch-line); border-radius:7px; padding:5px 8px; }
+.mapping-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0; }
+.mapping-toggle { display:inline-flex; gap:6px; align-items:center; white-space:nowrap; cursor:pointer; font:12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.mapping-toggle input { width:16px; height:16px; margin:0; accent-color:var(--perch-accent); }
+.quota-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.quota-card { display:flex; flex-direction:column; gap:5px; padding:12px; border:1px solid var(--perch-line); border-radius:8px; background:var(--perch-soft); }
+.quota-label { font-weight:600; }
+.quota-card strong { font-size:19px; font-variant-numeric:tabular-nums; }
+.quota-card progress { width:100%; height:8px; accent-color:var(--perch-accent); }
+.quota-card progress.near-limit { accent-color:var(--perch-warn); }
+@media (max-width:560px) { .quota-grid { grid-template-columns:1fr; } .bar { align-items:flex-start; flex-wrap:wrap; } }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 7px;
+  border: 1px solid var(--perch-line);
+  background: var(--perch-soft);
+  color: var(--perch-fg);
+  padding: 5px 12px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--perch-accent);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.ghost {
+  background: transparent;
+}
+
+button.small {
+  padding: 3px 9px;
+  font-size: 11px;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  background: transparent;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--perch-accent);
+  border-color: var(--perch-accent);
+  color: #fff;
+}
+
+.card {
+  border: 1px solid var(--perch-line);
+  border-radius: 11px;
+  background: var(--perch-bg);
+  padding: 13px 15px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.card-head h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--perch-muted);
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+}
+
+.muted {
+  color: var(--perch-muted);
+  font-size: 11px;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--perch-muted);
+  font-size: 12px;
+}
+
+.facts dd {
+  margin: 0;
+  font-size: 12px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.facts dd.mono {
+  font-family: var(--perch-mono);
+  font-size: 11.5px;
+}
+
+.table-wrap {
+  max-height: 52vh;
+  overflow: auto;
+  border: 1px solid var(--perch-line);
+  border-radius: 9px;
+}
+
+table.models {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+table.models thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--perch-soft);
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--perch-muted);
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--perch-line);
+  white-space: nowrap;
+}
+
+table.models td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--perch-line);
+  vertical-align: top;
+}
+
+table.models tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.models tbody tr.locked {
+  opacity: 0.62;
+}
+
+table.models .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+table.models .name {
+  font-weight: 560;
+}
+
+table.models .sub {
+  color: var(--perch-muted);
+  font-size: 11px;
+  font-family: var(--perch-mono);
+}
+
+td.pin {
+  font-family: var(--perch-mono);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+td.pin .unverified {
+  color: var(--perch-warn);
+}
+
+.empty {
+  text-align: center;
+  color: var(--perch-muted);
+  padding: 22px 10px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  border: 1px solid var(--perch-line);
+  color: var(--perch-muted);
+  background: var(--perch-soft);
+  white-space: nowrap;
+}
+
+.tag.pro {
+  border-color: color-mix(in srgb, var(--perch-accent) 40%, var(--perch-line));
+  color: var(--perch-accent);
+}
+
+.tag.ultra {
+  border-color: color-mix(in srgb, var(--perch-warn) 40%, var(--perch-line));
+  color: var(--perch-warn);
+}
+
+pre#test-output {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: var(--perch-soft);
+  border: 1px solid var(--perch-line);
+  font-family: var(--perch-mono);
+  font-size: 11.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.foot {
+  margin-top: auto;
+  padding-top: 6px;
+  color: var(--perch-muted);
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.error-text {
+  color: var(--perch-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

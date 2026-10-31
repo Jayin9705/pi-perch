@@ -1,0 +1,20 @@
+"use strict";
+const fs=require("node:fs");
+const path=require("node:path");
+const os=require("node:os");
+const {invoke}=require("./pi-invoke.cjs");
+(async()=>{
+  const source=path.resolve(__dirname,"../plugin");
+  const manifest=JSON.parse(fs.readFileSync(path.join(source,"manifest.json"),"utf8"));
+  if(manifest.id!=="local.pi-perch")throw new Error("Unexpected source plugin");
+  const target=path.join(os.homedir(),".pi-desktop/plugins/installed/local.pi-perch");
+  const old=JSON.parse(fs.readFileSync(path.join(target,"manifest.json"),"utf8"));
+  if(old.id!==manifest.id)throw new Error("Unexpected target plugin");
+  const backup=path.resolve(__dirname,"../backups/installed-"+old.version+"-"+Date.now());
+  fs.cpSync(target,backup,{recursive:true});
+  fs.cpSync(source,target,{recursive:true});
+  fs.rmSync(path.join(target,"lib/probe.js"),{force:true});
+  const loaded=await invoke("pluginReloadConfirm",{id:manifest.id,grantedPermissions:manifest.permissions});
+  console.log(JSON.stringify({ok:true,id:loaded.plugin?.id,version:loaded.plugin?.version,backup}));
+  console.log("panel",await invoke("pluginOpenPanel",manifest.id));
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

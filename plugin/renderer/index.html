@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perch Bridge</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="bar">
+        <div class="bar-title">
+          <span class="dot" id="state-dot" aria-hidden="true"></span>
+          <h1>Perch Bridge</h1>
+          <span class="pill" id="model-count">—</span>
+        </div>
+        <div class="bar-actions">
+          <button id="refresh" type="button" class="ghost">刷新</button>
+          <button id="test" type="button" class="ghost">测试连接</button>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="card-head"><h2>开始使用</h2></div>
+        <p>无需安装 Perch CLI、Node 或 npm。首次使用会自动下载官方运行组件，然后在浏览器登录 Perch。</p>
+        <div class="bar-actions">
+          <button id="setup" type="button" class="ghost">准备组件</button>
+          <select id="login-provider" aria-label="登录方式"><option value="google">Google</option><option value="github">GitHub</option></select>
+          <button id="login" type="button" class="ghost">登录 Perch</button>
+          <button id="login-cancel" type="button" class="ghost" hidden>取消登录</button>
+        </div>
+        <p id="login-state" class="muted" role="status"></p>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>套餐额度</h2><button id="usage-refresh" class="ghost small" type="button">刷新额度</button></div>
+        <p id="usage-summary" class="muted">正在读取 Perch 额度…</p>
+        <div id="usage-meters" class="quota-grid"></div>
+        <p id="usage-extra" class="muted"></p>
+        <p class="muted">5H / 7D 是滚动窗口；下次释放时间不代表全部额度同时重置。扣减以 Perch 账户为准。</p>
+      </section>
+      <section class="card">
+        <div class="card-head"><h2>套餐周期 · 各模型用量</h2><button id="model-usage-refresh" class="ghost small" type="button">刷新明细</button></div>
+        <p id="model-usage-summary" class="muted">正在读取当前套餐周期…</p>
+        <div class="table-wrap">
+          <table class="models"><thead><tr><th>模型</th><th class="num">调用</th><th class="num">输入 Token (M)</th><th class="num">输出 Token (M)</th><th class="num">缓存 Token (M)</th><th class="num">总 Token (M)</th><th class="num">用量 pt</th></tr></thead>
+          <tbody id="model-usage-rows"><tr><td colspan="7" class="empty">正在读取账号账本…</td></tr></tbody></table>
+        </div>
+        <p class="muted">Token 以 M 显示，1M＝100 万；悬停可查看精确数值。统计包含其他 Perch 客户端及内部调用。缓存 Token 已包含在总量中；pt 为用量折算单位，不表示额外扣费。</p>
+      </section>
+      <section class="card">
+        <div class="card-head">
+          <h2>模型</h2>
+          <div class="chips">
+            <button type="button" class="chip" data-filter="all" aria-pressed="true">全部</button>
+            <button type="button" class="chip" data-filter="pro" aria-pressed="false">Pro</button>
+            <button type="button" class="chip" data-filter="locked" aria-pressed="false">套餐未开放</button>
+          </div>
+        </div>
+        <p id="mapping-note" class="muted">正在核验 PI 模型映射…</p>
+        <div class="mapping-actions">
+          <button id="mapping-all" type="button" class="ghost small">全部映射</button>
+          <button id="mapping-none" type="button" class="ghost small">全部取消</button>
+          <button id="mapping-save" type="button" disabled>保存映射</button>
+          <span id="mapping-message" class="muted" role="status"></span>
+        </div>
+        <p class="muted">勾选决定模型是否出现在 PI 的 Perch 列表中，修改后点击保存。若提示待同步，请在 PI 插件管理中关闭后重新启用本插件，或重启 PI；“重载”按钮不会更新模型列表。此处不会主动切换会话模型。</p>
+        <div class="table-wrap">
+          <table class="models">
+            <thead>
+              <tr>
+                <th>模型</th>
+                <th>套餐</th>
+                <th class="num">上下文</th>
+                <th>思考强度</th>
+                <th>映射到 PI</th>
+              </tr>
+            </thead>
+            <tbody id="model-rows">
+              <tr><td colspan="5" class="empty">正在加载…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" id="test-card" hidden>
+        <div class="card-head">
+          <h2>测试结果</h2>
+          <button id="test-close" type="button" class="ghost small">关闭</button>
+        </div>
+        <pre id="test-output"></pre>
+      </section>
+
+      <footer class="foot">
+        <span id="foot-note">Serving on 127.0.0.1</span>
+      </footer>
+    </div>
+    <script src="panel.js" type="module"></script>
+  </body>
+</html>

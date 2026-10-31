@@ -1,0 +1,22 @@
+"use strict";
+const fs=require("node:fs");
+const path=require("node:path");
+const {invoke}=require("../tools/pi-invoke.cjs");
+const receipt=path.join(__dirname,"../pi-live-result.json");
+(async()=>{
+  const model=process.argv[2]||"gpt-6.1-terra";
+  if(!/^deepseek|^gpt-/.test(model))throw new Error("Live tests are limited to DS/GPT.");
+  const providerId="plugin:local.pi-perch:perch";
+  const providers=await invoke("providersList");
+  const provider=providers.providers.find(p=>p.id===providerId);
+  if(!provider?.enabled)throw new Error("Perch provider is not enabled in PI");
+  console.log("PI provider enabled; model count:",provider.models.length);
+  const created=await invoke("sessionCreate",{mode:"agent",title:"Perch Bridge CLI integration test",projectPath:path.resolve(__dirname,"..")});
+  const id=created.session.id;
+  fs.writeFileSync(receipt,JSON.stringify({sessionId:id,model,providerId,status:"created"},null,2));
+  const configured=await invoke("sessionConfigure",id,{mode:"agent",providerId,modelId:model,thinkingLevel:"low",permissionMode:"inherit"});
+  console.log("PI session configured",{id,providerId:configured.session.providerId,modelId:configured.session.modelId});
+  const result=await invoke("agentPrompt",{sessionId:id,messageId:crypto.randomUUID(),content:"This is a connection check. Reply with exactly PI_CLI_BRIDGE_OK. Do not use tools."});
+  console.log("PI prompt submitted",result);
+  fs.writeFileSync(receipt,JSON.stringify({sessionId:id,model,providerId,status:"submitted"},null,2));
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

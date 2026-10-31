@@ -1,0 +1,30 @@
+# Local state, sign-in, test receipts and captured account data
+.perch/
+.local-tools/
+.standalone-test-data/
+backups/
+pi-ref/
+node_modules/
+**/runtime/
+**/credentials.json
+**/cli-auth-session.json
+**/model-mapping.json
+*.log
+*.tmp
+*.png
+pi-live-result.json
+perch-models.json
+optionid-map.json
+
+# One-off recovery / reverse-engineering helpers are not distributable project code.
+tools/fix-registry.js
+tools/asar.mjs
+tools/extract.mjs
+tools/inspect-acp.cjs
+
+# Keep only the versioned, reviewed plugin snapshots.
+dist/*
+!dist/local.pi-perch-0.3.1.piplug
+
+.DS_Store
+Thumbs.db

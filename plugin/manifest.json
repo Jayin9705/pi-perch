@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "id": "local.pi-perch",
+  "name": "Perch Bridge",
+  "version": "0.3.1",
+  "description": "Use Perch models in PI with a self-managed official runtime and browser sign-in. No global Perch CLI, Node or npm installation required.",
+  "author": "pi-perch",
+  "license": "MIT",
+  "main": "main.js",
+  "categories": [
+    "productivity"
+  ],
+  "permissions": [
+    "ui.panel",
+    "background.service",
+    "net.fetch",
+    "provider.register",
+    "models.list"
+  ],
+  "net": {
+    "domains": [
+      "app.perchai.app",
+      "*.supabase.co",
+      "registry.npmjs.org"
+    ]
+  },
+  "engines": {
+    "piDesktop": ">=0.21.0"
+  },
+  "ui": {
+    "panel": "renderer/index.html",
+    "title": {
+      "en": "Perch Bridge",
+      "zh-CN": "Perch 桥接"
+    },
+    "width": 900,
+    "height": 860
+  },
+  "activationEvents": [
+    "onStartup"
+  ],
+  "contributes": {
+    "services": [
+      {
+        "id": "perch-provider-host",
+        "label": "Perch provider host"
+      }
+    ],
+    "settings": [
+      {
+        "key": "enabled",
+        "type": "boolean",
+        "title": "Enable Perch Bridge",
+        "default": true,
+        "scope": "plugin"
+      },
+      {
+        "key": "preferredPort",
+        "type": "number",
+        "title": "Loopback port (1025-65535)",
+        "description": "Local port used by PI. If occupied, free the port or choose a different one and reload the plugin.",
+        "default": 41891,
+        "scope": "plugin"
+      },
+      {
+        "key": "refreshSeconds",
+        "type": "number",
+        "title": "Model list refresh interval (seconds)",
+        "description": "How often the plugin re-reads the Perch catalog. Minimum 60.",
+        "default": 600,
+        "scope": "plugin"
+      }
+    ],
+    "providers": [
+      {
+        "id": "perch",
+        "name": "Perch",
+        "baseUrl": "http://127.0.0.1:41891/v1",
+        "apiStyle": "chat_completions",
+        "authKind": "none",
+        "models": [
+          {
+            "id": "deepseek-flash-starter",
+            "name": "DeepSeek V4.1 Flash 1017 (Starter)",
+            "alias": "DeepSeek V4.1 Flash 1017 (Starter)",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "glm-5.3-flash-starter",
+            "name": "GLM 5.3 Flash (Starter)",
+            "alias": "GLM 5.3 Flash (Starter)",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "qwen-3.8-max",
+            "name": "Qwen 3.8 Max",
+            "alias": "Qwen 3.8 Max",
+            "contextWindow": 262144,
+            "maxTokens": 32768,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gemini-4-argon",
+            "name": "Gemini 4 Argon",
+            "alias": "Gemini 4 Argon",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "claude-opus-5.5",
+            "name": "Claude Opus 5.5",
+            "alias": "Claude Opus 5.5",
+            "contextWindow": 1000000,
+            "maxTokens": 125000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gpt-6.1-sol",
+            "name": "GPT-6.1 Sol",
+            "alias": "GPT-6.1 Sol",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gpt-6.1-terra",
+            "name": "GPT-6.1 Terra",
+            "alias": "GPT-6.1 Terra",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "kimi-3.1-pro",
+            "name": "Kimi K3.1 Pro",
+            "alias": "Kimi K3.1 Pro",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "deepseek-v4.1-flash-1017",
+            "name": "DeepSeek V4.1 Flash (1017)",
+            "alias": "DeepSeek V4.1 Flash (1017)",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "gpt-6-luna",
+            "name": "GPT-6 Luna",
+            "alias": "GPT-6 Luna",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "claude-sonnet-5.5",
+            "name": "Claude Sonnet 5.5",
+            "alias": "Claude Sonnet 5.5",
+            "contextWindow": 1000000,
+            "maxTokens": 125000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "claude-haiku-5.5",
+            "name": "Claude Haiku 5.5",
+            "alias": "Claude Haiku 5.5",
+            "contextWindow": 1000000,
+            "maxTokens": 125000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "kimi-3",
+            "name": "Kimi K3",
+            "alias": "Kimi K3",
+            "contextWindow": 1000000,
+            "maxTokens": 125000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "grok-4.7",
+            "name": "Grok 4.7",
+            "alias": "Grok 4.7",
+            "contextWindow": 500000,
+            "maxTokens": 62500,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "grok-4.6",
+            "name": "Grok 4.6",
+            "alias": "Grok 4.6",
+            "contextWindow": 500000,
+            "maxTokens": 62500,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "glm-5.3",
+            "name": "GLM 5.3",
+            "alias": "GLM 5.3",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "glm-5.3-flash",
+            "name": "GLM 5.3 Flash",
+            "alias": "GLM 5.3 Flash",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "qwen-3.8-flash",
+            "name": "Qwen 3.8 Flash",
+            "alias": "Qwen 3.8 Flash",
+            "contextWindow": 1000000,
+            "maxTokens": 125000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "qwen-3.8",
+            "name": "Qwen 3.8 27B",
+            "alias": "Qwen 3.8 27B",
+            "contextWindow": 262144,
+            "maxTokens": 32768,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "xhigh"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "minimax-m3",
+            "name": "MiniMax M3",
+            "alias": "MiniMax M3",
+            "contextWindow": 262000,
+            "maxTokens": 32750,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low"
+            ],
+            "defaultThinkingLevel": "low"
+          },
+          {
+            "id": "nemotron-ultra",
+            "name": "Nemotron Ultra",
+            "alias": "Nemotron Ultra",
+            "contextWindow": 262000,
+            "maxTokens": 32750,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low"
+            ],
+            "defaultThinkingLevel": "low"
+          },
+          {
+            "id": "nemotron-lightning",
+            "name": "Nemotron 3.5 Lightning",
+            "alias": "Nemotron 3.5 Lightning",
+            "contextWindow": 262000,
+            "maxTokens": 32750,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low"
+            ],
+            "defaultThinkingLevel": "low"
+          },
+          {
+            "id": "deepseek-v4",
+            "name": "DeepSeek V4 Pro 0813",
+            "alias": "DeepSeek V4 Pro 0813",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "deepseek-v4-flash-0731-262k",
+            "name": "DeepSeek V4 Flash 0731",
+            "alias": "DeepSeek V4 Flash 0731",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultThinkingLevel": "max"
+          },
+          {
+            "id": "qwen-3.7-plus",
+            "name": "Qwen 3.7 Plus",
+            "alias": "Qwen 3.7 Plus",
+            "contextWindow": 262144,
+            "maxTokens": 32768,
+            "supportsImages": true
+          },
+          {
+            "id": "inkling",
+            "name": "Inkling",
+            "alias": "Inkling",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "beam-1.0",
+            "name": "Beam 1.0",
+            "alias": "Beam 1.0",
+            "contextWindow": 1048576,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "kimi-2.7",
+            "name": "Kimi K2.7 Code",
+            "alias": "Kimi K2.7 Code",
+            "contextWindow": 262144,
+            "maxTokens": 32768,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low"
+            ],
+            "defaultThinkingLevel": "low"
+          },
+          {
+            "id": "glm-5.2",
+            "name": "GLM 5.2",
+            "alias": "GLM 5.2",
+            "contextWindow": 203000,
+            "maxTokens": 25375,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low"
+            ],
+            "defaultThinkingLevel": "low"
+          },
+          {
+            "id": "gpt-6-sol",
+            "name": "GPT-6 Sol",
+            "alias": "GPT-6 Sol",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gpt-5.6-sol",
+            "name": "GPT-5.6 Sol",
+            "alias": "GPT-5.6 Sol",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gpt-5.6-terra",
+            "name": "GPT-5.6 Terra",
+            "alias": "GPT-5.6 Terra",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          },
+          {
+            "id": "gpt-5.6-luna",
+            "name": "GPT-5.6 Luna",
+            "alias": "GPT-5.6 Luna",
+            "contextWindow": 1050000,
+            "maxTokens": 128000,
+            "supportsImages": true,
+            "thinkingLevels": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultThinkingLevel": "medium"
+          }
+        ]
+      }
+    ]
+  },
+  "safetyNotes": "Reads the sign-in the perch CLI already saved at ~/.perch/cli-auth-session.json (read-only) and keeps its own copy of the token pair it used under the plugin's data directory. Serves an OpenAI-compatible endpoint on 127.0.0.1 only; requests are checked for a loopback Host and a loopback-or-absent Origin. Tokens are sent only to app.perchai.app and the account's Supabase host. Nothing leaves this machine except to those two hosts."
+}

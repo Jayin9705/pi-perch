@@ -1,0 +1,12 @@
+{
+  "name": "pi-perch-bridge",
+  "version": "0.3.1",
+  "private": true,
+  "description": "Perch CLI/ACP bridge for PI-Desktop",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/regression.js",
+    "build": "node tools/build.cjs"
+  },
+  "engines": { "node": ">=22" }
+}
